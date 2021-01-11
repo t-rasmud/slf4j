@@ -24,6 +24,8 @@
  */
 package org.slf4j.helpers;
 
+import org.checkerframework.checker.determinism.qual.*;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -62,7 +64,7 @@ public class SubstitutableLoggerTest extends TestCase {
     }
 
     private void invokeMethods(Logger proxyLogger) throws InvocationTargetException, IllegalAccessException {
-        for (Method m : Logger.class.getDeclaredMethods()) {
+        for (@Det Method m : Logger.class.getDeclaredMethods()) {
             if (!EXCLUDED_METHODS.contains(m.getName())) {
                 m.invoke(proxyLogger, new Object[m.getParameterTypes().length]);
             }
@@ -87,7 +89,7 @@ public class SubstitutableLoggerTest extends TestCase {
 
     private static Set<String> determineMethodSignatures(Class<Logger> loggerClass) {
         Set<String> methodSignatures = new HashSet<String>();
-        for (Method m : loggerClass.getDeclaredMethods()) {
+        for (@Det Method m : loggerClass.getDeclaredMethods()) {
             if (!EXCLUDED_METHODS.contains(m.getName())) {
                 methodSignatures.add(getMethodSignature(m));
             }
